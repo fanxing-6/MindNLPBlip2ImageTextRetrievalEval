@@ -90,7 +90,7 @@ def compute_itm_scores(image, texts, batch_size=48):
         itc_out = itm_model(**inputs, use_image_text_matching_head=False)
         itc_scores = itc_out.logits_per_image.squeeze()
 
-        # 由于ITC分数是二维的，我们需要选择对角线元素
+        # 由于ITC分数是二维的，我们需要选择对角线元素 mindspore 不支持 pytorch中的 diag 所以这样实现
         k = mindspore.Tensor(0, mindspore.int32)
         padding_value = mindspore.Tensor(0, itc_scores.dtype)
         itc_scores_diag = ops.matrix_diag_part(itc_scores, k, padding_value)
